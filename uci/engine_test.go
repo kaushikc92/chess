@@ -4,22 +4,19 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/notnil/chess"
-	"github.com/notnil/chess/uci"
+	"github.com/kaushikc92/chess"
+	"github.com/kaushikc92/chess/uci"
 )
 
 var StockfishPath string
 
 func init() {
-	dir, _ := os.Getwd()
-	StockfishPath = filepath.Join(dir, "..", "stockfish")
+	StockfishPath = "stockfish"
 }
 
 func Example() {
@@ -122,6 +119,23 @@ func TestLogger(t *testing.T) {
 		if expected != actual {
 			t.Fatalf("expected %s but got %s", expected, actual)
 		}
+	}
+}
+
+func TestEval(t *testing.T) {
+	eng, err := uci.New(StockfishPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer eng.Close()
+
+	pos := &chess.Position{}
+	pos.UnmarshalText([]byte("r4r2/1b2bppk/ppq1p3/2pp3n/5P2/1P2P3/PBPPQ1PP/R4RK1 w - - 0 2"))
+	setPos := uci.CmdPosition{Position: pos}
+
+	setGo := uci.CmdGo{Depth: 25}
+	if err := eng.Run(uci.CmdUCINewGame, setPos, setGo, uci.CmdEval); err != nil {
+		t.Fatal(err)
 	}
 }
 

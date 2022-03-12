@@ -1,5 +1,3 @@
-module github.com/notnil/chess
+module github.com/kaushikc92/chess
 
-go 1.14
-
-require github.com/ajstarks/svgo v0.0.0-20200320125537-f189e35d30ca
+go 1.16

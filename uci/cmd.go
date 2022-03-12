@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/notnil/chess"
+	"github.com/kaushikc92/chess"
 )
 
 // Cmd is a UCI compliant command
@@ -113,6 +113,18 @@ var (
 	// CmdQuit (shouldn't be used directly as its handled by Engine.Close()) corresponds to the "quit" command:
 	// quit the program as soon as possible
 	CmdQuit = cmdNoOptions{Name: "quit", F: func(e *Engine) error {
+		return nil
+	}}
+
+	CmdEval = cmdNoOptions{Name: "eval", F: func(e *Engine) error {
+		scanner := bufio.NewScanner(e.out)
+		for scanner.Scan() {
+			text := e.readLine(scanner)
+			if strings.HasPrefix(text, "Final evaluation") {
+				fmt.Printf(text)
+				break
+			}
+		}
 		return nil
 	}}
 )
