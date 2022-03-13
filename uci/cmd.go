@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"strconv"
 	"time"
 
 	"github.com/kaushikc92/chess"
@@ -121,7 +122,12 @@ var (
 		for scanner.Scan() {
 			text := e.readLine(scanner)
 			if strings.HasPrefix(text, "Final evaluation") {
-				fmt.Printf(text)
+				parts := strings.Fields(text)
+				eval, err := strconv.ParseFloat(parts[2], 64)
+				if err != nil {
+					return err
+				}
+				e.eval = eval
 				break
 			}
 		}

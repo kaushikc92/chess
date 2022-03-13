@@ -21,6 +21,7 @@ type Engine struct {
 	id      map[string]string
 	options map[string]Option
 	results SearchResults
+	eval	float64
 	mu      *sync.RWMutex
 }
 
@@ -178,4 +179,10 @@ func (e *Engine) readLine(scanner *bufio.Scanner) string {
 		e.logger.Println(s)
 	}
 	return s
+}
+
+func (e *Engine) Eval() float64 {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+	return e.eval
 }
